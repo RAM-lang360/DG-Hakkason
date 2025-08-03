@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Review Data Viewer</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .review-display {
+        background: #f5f5f5;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+      }
+      .rating-high {
+        color: #2e8b57;
+        font-weight: bold;
+      }
+      .rating-medium {
+        color: #ff8c00;
+        font-weight: bold;
+      }
+      .rating-low {
+        color: #dc143c;
+        font-weight: bold;
+      }
+      pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Review Data Viewer</h1>
+    <p>Click the button below to load and display review data.</p>
+    <button id="loadReviewDataButton">Load Review Data</button>
+
+    <div id="reviewDisplay"></div>
+
+    <script src="transform_review.js"></script>
+    <script>
+      document
+        .getElementById("loadReviewDataButton")
+        .addEventListener("click", async () => {
+          try {
+            const reviewDisplay = document.getElementById("reviewDisplay");
+            reviewDisplay.innerHTML = "<p>Loading...</p>";
+
+            // 元のreview データと変換後のデータを取得
+            const originalReviews = await getOriginalReviewData();
+            const transformedReviews = await formatReviewData();
+
+            // 評価に基づいてクラスを決定する関数
+            function getRatingClass(rating) {
+              if (rating >= 4.0) return "rating-high";
+              if (rating >= 3.0) return "rating-medium";
+              return "rating-low";
+            }
+
+            // 結果を表示
+            reviewDisplay.innerHTML = `
+          <h2>Review変数の中身:</h2>
+          
+          <div class="review-display">
+            <h3>元のreview変数 (map関数に渡される各review):</h3>
+            <pre>${JSON.stringify(originalReviews, null, 2)}</pre>
+          </div>
+          
+          <div class="review-display">
+            <h3>変換後のreview変数 (map関数の返り値):</h3>
+            <pre>${JSON.stringify(transformedReviews, null, 2)}</pre>
+          </div>
+          
+          <div class="review-display">
+            <h3>各reviewの個別確認:</h3>
+            ${originalReviews
+              .map(
+                (review, index) => `
+              <h4>Review ${index + 1}:</h4>
+              <p><strong>App ID:</strong> ${review.appId}</p>
+              <p><strong>平均評価:</strong> <span class="${getRatingClass(
+                review.averageRating
+              )}">${review.averageRating}</span>/5.0</p>
+              <p><strong>レビュー数:</strong> ${review.count.toLocaleString()}件</p>
+              <hr>
+            `
+              )
+              .join("")}
+          </div>
+        `;
+
+            console.log("元のReview変数:", originalReviews);
+            console.log("変換後のReview変数:", transformedReviews);
+          } catch (error) {
+            document.getElementById(
+              "reviewDisplay"
+            ).innerHTML = `<p style="color: red;">エラー: ${error.message}</p>`;
+            console.error("エラー:", error);
+          }
+        });
+    </script>
+  </body>
+</html>

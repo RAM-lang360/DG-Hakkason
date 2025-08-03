@@ -1,0 +1,81 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "isSuccess": true,
+    "message": "Orders retrieved successfully"
+  },
+  "orders": [
+    {
+      "id": "order_2073",
+      "orderAt": 1735446129789,
+      "status": "completed",
+      "customer": {
+        "id": "customer_0142",
+        "name": "水野翔",
+        "email": "mizuno.sho@example.com",
+        "phoneNumber": "09012345699",
+        "gender": "male",
+        "birthDate": "1995-10-31",
+        "prefecture": {
+          "code": "09",
+          "name": "栃木県"
+        }
+      },
+      "app": {
+        "id": "app_0010",
+        "name": "海の支配者",
+        "iconImageUrl": "https://example.com/image/app/icon/app_010.jpg",
+        "platform": ["android"]
+      },
+      "paymentMethod": "credit_card",
+      "item": {
+        "id": "item_0010_0005",
+        "appId": "app_0010",
+        "name": "海賊のコイン",
+        "imageUrl": "https://example.com/image/item/currency.png",
+        "price": 200,
+        "currency": "JPY",
+        "category": "currency"
+      }
+    },
+    {
+      "id": "order_1116",
+      "orderAt": 1704394553050,
+      "status": "completed",
+      "customer": {
+        "id": "customer_0142",
+        "name": "水野翔",
+        "email": "mizuno.sho@example.com",
+        "phoneNumber": "09012345699",
+        "gender": "male",
+        "birthDate": "1995-10-31",
+        "prefecture": {
+          "code": "09",
+          "name": "栃木県"
+        }
+      },
+      "app": {
+        "id": "app_0010",
+        "name": "海の支配者",
+        "iconImageUrl": "https://example.com/image/app/icon/app_010.jpg",
+        "platform": ["android"]
+      },
+      "paymentMethod": "credit_card",
+      "item": {
+        "id": "item_0010_0001",
+        "appId": "app_0010",
+        "name": "海賊の剣",
+        "imageUrl": "https://example.com/image/item/weapon.png",
+        "price": 1600,
+        "currency": "JPY",
+        "category": "weapon"
+      }
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 600,
+    "totalCount": 2,
+    "totalPages": 1
+  }
+}
