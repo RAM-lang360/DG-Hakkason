@@ -1,0 +1,21 @@
+{
+  "name": "dg-hakkason-api",
+  "version": "1.0.0",
+  "description": "ローカルAPIサーバー for DG Hakkason",
+  "main": "api.js",
+  "scripts": {
+    "start": "node api.js",
+    "dev": "nodemon api.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["api", "express", "localhost", "cors"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

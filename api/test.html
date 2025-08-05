@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ローカルAPIテスト</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+      .button-group {
+        display: flex;
+        gap: 10px;
+        margin: 20px 0;
+        flex-wrap: wrap;
+      }
+      button {
+        background: #007cba;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.3s;
+      }
+      button:hover {
+        background: #005a87;
+      }
+      #result {
+        margin-top: 20px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 5px;
+        border-left: 4px solid #007cba;
+        min-height: 100px;
+      }
+      pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+      .status-ok {
+        color: #28a745;
+      }
+      .status-error {
+        color: #dc3545;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🚀 ローカルAPI テスト</h1>
+
+      <div class="button-group">
+        <button onclick="testHealth()">ヘルスチェック</button>
+        <button onclick="testOpen()">Transform実行</button>
+        <button onclick="testUpdateHL()">HL更新テスト</button>
+        <button onclick="testTest()">test.js実行</button>
+      </div>
+
+      <div id="result">
+        <p>
+          📡 APIサーバーをテストするには、上のボタンをクリックしてください。
+        </p>
+        <p>🌐 APIサーバー: <strong>http://localhost:3000</strong></p>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE = "http://localhost:3000";
+      const resultDiv = document.getElementById("result");
+
+      function updateResult(title, data, isError = false) {
+        const statusClass = isError ? "status-error" : "status-ok";
+        resultDiv.innerHTML = `
+                <h3 class="${statusClass}">${title}</h3>
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+            `;
+      }
+
+      async function makeRequest(url, options = {}) {
+        try {
+          updateResult("🔄 API呼び出し中...", { url });
+
+          const response = await fetch(url, {
+            ...options,
+            headers: {
+              "Content-Type": "application/json",
+              ...options.headers,
+            },
+          });
+
+          const data = await response.json();
+          return { success: response.ok, data, status: response.status };
+        } catch (error) {
+          return {
+            success: false,
+            error: error.message,
+            message: "サーバーが起動していません",
+          };
+        }
+      }
+
+      async function testHealth() {
+        const result = await makeRequest(`${API_BASE}/`);
+        updateResult(
+          result.success ? "✅ ヘルスチェック成功" : "❌ ヘルスチェック失敗",
+          result,
+          !result.success
+        );
+      }
+
+      async function testOpen() {
+        const result = await makeRequest(`${API_BASE}/open`);
+        updateResult(
+          result.success ? "✅ Transform実行成功" : "❌ Transform実行失敗",
+          result,
+          !result.success
+        );
+      }
+
+      async function testUpdateHL() {
+        const updateData = {
+          super_heavy: [2000, 0],
+          heavy: [1000, 2000],
+          light: [500, 1000],
+          super_light: [0, 500],
+        };
+
+        const result = await makeRequest(`${API_BASE}/update/HL`, {
+          method: "POST",
+          body: JSON.stringify(updateData),
+        });
+
+        updateResult(
+          result.success ? "✅ HL更新成功" : "❌ HL更新失敗",
+          result,
+          !result.success
+        );
+      }
+
+      async function testTest() {
+        const result = await makeRequest(`${API_BASE}/test`);
+        updateResult(
+          result.success ? "✅ test.js実行成功" : "❌ test.js実行失敗",
+          result,
+          !result.success
+        );
+      }
+
+      window.addEventListener("load", testHealth);
+    </script>
+  </body>
+</html>

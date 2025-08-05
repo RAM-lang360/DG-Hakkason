@@ -17,6 +17,7 @@ app.use(
       "X-Requested-With",
       "Accept",
       "Origin",
+      "ngrok-skip-browser-warning",
     ],
   })
 );
@@ -87,12 +88,18 @@ app.get("/open", async (req, res) => {
     console.log("HL処理完了", hlResult);
     const rResult = transform.transformToR();
     console.log("R処理完了", rResult);
+
+    // ai_adviceを実行
+    const { ai_advice } = require("./ai_advice.js");
+    const advice = await ai_advice();
+    console.log("AIアドバイス取得完了", advice);
     res.json({
       status: "success",
       message: "transform処理完了",
       data: {
         transformHL: hlResult,
         transformR: rResult,
+        ai_advice: advice,
       },
       timestamp: new Date().toISOString(),
     });

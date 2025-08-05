@@ -5,7 +5,7 @@ async function ai_advice() {
   try {
     const response = await postAPI();
     const { formatted, error } = response_format(response);
-
+    console.log("AIアドバイス:", formatted);
     if (error.length) {
       return { status: "error", error: error };
     } else {
@@ -113,7 +113,7 @@ ${JSON.stringify(jsonsR, null, 2)}
 
 ## Step 2: マーケティング施策の提案
 
-Step 1の分析結果に基づき、以下の各ユーザーセグメントに対する具体的なマーケティング施策を提案してください。
+Step 1の分析結果に基づき、以下の各ユーザーセグメントに対する具体的なマーケティング施策を提案してください。まず最初に何をやるべきかを明確にし、その後に各セグメントごとの施策を提案してください。
 施策は、必ず**「ターゲットユーザー」「施策内容」「期待される効果」**の3つの要素を含めて、具体的かつ実行可能な形で記述してください。
 
 * **超ヘビーユーザー向け施策:**
@@ -131,13 +131,13 @@ Step 1の分析結果に基づき、以下の各ユーザーセグメントに�
 
 # 出力形式
 
-上記の分析と提案を、マークダウン形式を用いて、論理的で分かりやすくまとめてください。
+上記の分析と提案を、マークダウン形式を用いて、論理的で分かりやすくまとめてください。改行には\nでなく半角ダブルスペースを使ってください
 `;
   return prompt;
 }
 //テスト実行
 if (require.main === module) {
-  ai_advice();
+  const p = ai_advice();
 }
 
 // モジュールエクスポート
